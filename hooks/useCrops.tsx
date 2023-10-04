@@ -14,5 +14,16 @@ export function useCrops() {
                 ? useQuery(Crop).sorted('title', false)
                 : [];
         },
+        getById(id: string) {
+            const _id = Realm.BSON.ObjectId.createFromHexString(id);
+            return realm.objectForPrimaryKey(Crop, _id);
+        },
+        findByCategory(categoryId: number) {
+            return realm.objects(Crop).filtered('categories IN $0', [categoryId]);
+        },
+        findByName(name: string) {
+            return realm.objects(Crop).filtered('title CONTAINS[c] $0', name);
+        }
     }
 }
+

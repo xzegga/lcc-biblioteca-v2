@@ -1,18 +1,20 @@
+import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
     Image, ImageBackground, Pressable, Text, TextInput, TouchableOpacity, View
 } from 'react-native';
 import tailwind from 'twrnc';
 
-import { useAuth } from '../context/AuthContext';
 import Loading from '../components/Loading';
-import { router } from 'expo-router';
+import { useAuth } from '../context/AuthContext';
 
 export default function LoginScreen() {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('');
-    const { login, authState } = useAuth();
+    const { login } = useAuth();
+    const { authState } = useAuth();
+    const router = useRouter();
 
     const loginFn = async () => {
         setLoading(true);
@@ -22,10 +24,10 @@ export default function LoginScreen() {
     }
 
     useEffect(() => {
-        if(authState?.authenticated) {
-            router.replace('/');
+        if(authState?.authenticated == true) {
+            router.push("/");
         }
-    }, [authState]);
+    }, [authState?.authenticated]);
 
     return (
         <View style={tailwind`flex-1 items-center justify-center bg-slate-50`}>

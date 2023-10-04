@@ -11,9 +11,17 @@ export function useCategories() {
     return {
         items() {
             return (collections.exist(realm, collectionName))
-                ? useQuery(Category).sorted('name', false)
+                ? useQuery(Category).sorted('count', true)
                 : [];
         },
+        getNamesByIds(ids: number[] = []){
+            return ids.map((id) => {
+                return realm.objects(collectionName).filtered(`id == ${id}`)[0].name;
+            }) as string[];
+        },
+        getById(id: number) {
+            return realm.objects(collectionName).filtered(`id == ${id}`)[0];
+        }
         // addCategory(name: string) {
         //     realm.write(() => {
         //         realm.create('Category', {

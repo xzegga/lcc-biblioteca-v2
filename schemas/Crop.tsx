@@ -25,3 +25,4 @@ export class Crop extends Realm.Object<Crop> {
         },
     };
 }
+

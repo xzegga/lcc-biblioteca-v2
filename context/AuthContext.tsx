@@ -22,6 +22,7 @@ export const TOKEN_KEY = 'jwt-auth-token';
 export const TOKEN_TYPE = 'token-type';
 export const REALM_API_ID = 'realm-api';
 export const REALM_API_KEY = 'realm-api-key';
+export const GPT_API_KEY = 'gpt-api-key';
 
 export const AUTH_URL = 'api/v1/token';
 export const API_KEY_URL = 'wp/v2/atlas-api-key';
@@ -79,6 +80,8 @@ export const AuthProvider = ({ children }: any) => {
                 if (api_credentials?.data?.api_key) {
                     await SecureStore.setItemAsync(REALM_API_ID, api_credentials.data.api_id);
                     await SecureStore.setItemAsync(REALM_API_KEY, api_credentials.data.api_key);
+                    await SecureStore.setItemAsync(GPT_API_KEY, api_credentials.data.gpt_api_key);
+                    console.log(api_credentials.data.gpt_api_key);
                 }
 
                 setAuthState({
@@ -126,7 +129,7 @@ export const AuthProvider = ({ children }: any) => {
         }
         // If the app is offline, but credentials are
         // cached, return existing user.
-        setUser(app.currentUser!);
+        //setUser(app.currentUser!);
 
         return app.currentUser!;
     };

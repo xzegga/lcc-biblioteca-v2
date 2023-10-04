@@ -9,7 +9,7 @@ export function useCropIssues() {
     const collections = useCollections();
 
     return {
-        items(){
+        items() {
             return (collections.exist(realm, collectionName))
                 ? useQuery(CropIssues).sorted('title', false)
                 : [];

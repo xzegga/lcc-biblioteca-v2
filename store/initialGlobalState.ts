@@ -1,3 +1,4 @@
+import { Category } from "../schemas/Category";
 
 export const localStorageKeys = ['selectedWorkspace', 'selectedNotebook'];
 export const sessionStorageKeys = ['page.name:page'];
@@ -12,4 +13,5 @@ export const initialGlobalState = {
   images: {} as ImageList,
   toDownload: [] as string[],
   appState: 'loading' as AppState,
+  selectedCategory: {} as Category,
 };

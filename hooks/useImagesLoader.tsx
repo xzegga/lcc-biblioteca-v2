@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
-import * as FileSystem from 'expo-file-system';
+import { useCallback, useEffect, useState } from "react";
+import * as FileSystem from "expo-file-system";
 
 const getImagePathsRecursive = async (
   directory: string,
-  baseUri: string
+  baseUri: string,
 ): Promise<{ [key: string]: string }> => {
   const result: { [key: string]: string } = {};
 
@@ -21,18 +21,18 @@ const getImagePathsRecursive = async (
     }
   };
 
-  await readDirectory(directory, '');
+  await readDirectory(directory, "");
 
   return result;
 };
 
 const useImagesLoader = (
   folderPath: string,
-  baseUri: string
-): { imagePaths: {[key: string]: string } | null, pathsLoaded: boolean} => {
-  const [imagePaths, setImagePaths] = useState<{ [key: string]: string } | null>(
-    null
-  );
+  baseUri: string,
+): { imagePaths: { [key: string]: string } | null; pathsLoaded: boolean } => {
+  const [imagePaths, setImagePaths] = useState<{
+    [key: string]: string;
+  } | null>(null);
   const [pathsLoaded, setPathsLoaded] = useState(false);
 
   useEffect(() => {

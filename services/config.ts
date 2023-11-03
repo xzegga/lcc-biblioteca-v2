@@ -1,5 +1,5 @@
 import * as FileSystem from "expo-file-system";
-import * as Updates from 'expo-updates';
+import * as Updates from "expo-updates";
 
 export const folderPath = `${FileSystem.documentDirectory}images`;
 export const baseUri = `${FileSystem.documentDirectory}images`;

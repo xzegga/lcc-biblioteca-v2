@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import { create } from 'zustand';
+import { create } from "zustand";
 
 export type StoreReturnType<T> = T & {
   setState: (newState: Partial<T>) => void;

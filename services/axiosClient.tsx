@@ -1,5 +1,5 @@
-import Config from './config';
-import axios from 'axios';
+import Config from "./config";
+import axios from "axios";
 
 export const AxiosClient = (function () {
   let instance: any;
@@ -8,14 +8,16 @@ export const AxiosClient = (function () {
   function createAxiosClient(token: string, multipart = false) {
     const axiosInstance = axios.create({
       baseURL: `${Config.apiUrl}/wp-json/`,
-      ...(multipart ? {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      } : {}),
+      ...(multipart
+        ? {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        : {}),
     });
     // Add a request interceptor
-    if (token !== '') {
+    if (token !== "") {
       axiosInstance.interceptors.request.use(
         (config) => {
           // Add the bearer JWT token to the request headers
@@ -26,7 +28,7 @@ export const AxiosClient = (function () {
         (error) => {
           console.log({ error });
           return Promise.reject(error);
-        }
+        },
       );
     }
 
@@ -38,10 +40,7 @@ export const AxiosClient = (function () {
       this.set(token, multipart);
     },
     get(token: string, multipart?: boolean) {
-      if (
-        tokenInstance !== token ||
-        !instance
-      ) {
+      if (tokenInstance !== token || !instance) {
         this.set(token, multipart);
       }
       return instance;

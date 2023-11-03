@@ -11,11 +11,14 @@ export default function useSaveLocalImage() {
 
     const fileCompleteUrl = `${Config.apiUrl}${imageUrl}`;
     try {
-      const res = await FileSystem.downloadAsync(fileCompleteUrl, fileUri + fileName);
+      const res = await FileSystem.downloadAsync(
+        fileCompleteUrl,
+        fileUri + fileName,
+      );
       // saveFile(res.uri);
     } catch (err) {
       console.log("FS Err: ", err);
-    } 
+    }
   };
 
   const saveFile = async (fileUri: string) => {
@@ -39,17 +42,16 @@ export default function useSaveLocalImage() {
 
   function extractPathAndFileName(url: string): [string, string] {
     // Split the URL into an array of path segments
-    const segments = url.split('/');
+    const segments = url.split("/");
 
     // Get the last segment, which is the filename
-    const fileName = segments.pop() || '';
+    const fileName = segments.pop() || "";
 
     // Join the remaining segments to get the path
-    const path = segments.join('/');
+    const path = segments.join("/");
 
     return [path, fileName];
   }
-
 
   return { downloadAndSave };
 }

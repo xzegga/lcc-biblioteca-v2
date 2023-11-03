@@ -1,19 +1,20 @@
 import { Slot } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import 'react-native-get-random-values';
 
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-
+import RealmWrapper from '../components/realm/RealmWrapper';
 import { AuthProvider } from '../context/AuthContext';
 
-export default function Root() {
-    // Set up the auth context and render our layout inside of it.
-    const colorScheme = useColorScheme();
+export const unstable_settings = {
+    // ensures any route can link back to `/`
+    initialRouteName: "index",
+};
 
+export default function Root() {
     return (
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <AuthProvider>
-                <Slot />
-            </AuthProvider>
-        </ThemeProvider>
+        <AuthProvider>
+            <RealmWrapper>
+                <Slot initialRouteName='index' />
+            </RealmWrapper>
+        </AuthProvider>
     );
 }

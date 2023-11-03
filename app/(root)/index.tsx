@@ -1,24 +1,37 @@
-import { useEffect, useState } from 'react';
-import { SafeAreaView, StatusBar, Text, View } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import { SafeAreaView, StatusBar, View, Text } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Results } from 'realm/dist/bundle';
 import tailwind from 'twrnc';
 
+import QuestionsIcon from '../../assets/questions.svg';
 import { Categories } from '../../components/Categories';
+import { Crops } from '../../components/Crops';
+import { CustomHeader } from '../../components/CustomHeader';
+import ParallaxScrollView from '../../components/ParallaxScrollView';
 import { SearchBar } from '../../components/SarchBar';
-import { baseUri, folderPath } from '../../services/config';
 import { useCategories } from '../../hooks/useCategories';
 import { useCropIssues } from '../../hooks/useCropIssues';
 import { useCrops } from '../../hooks/useCrops';
 import { useStore } from '../../hooks/useGlobalStore';
 import useImagesLoader from '../../hooks/useImagesLoader';
 import useRealmSubscriptions from '../../hooks/useRealmSubscriptions';
+import useScrollBar from '../../hooks/useScrollBar';
 import { Category } from '../../schemas/Category';
 import { Crop } from '../../schemas/Crop';
 import { CropIssues } from '../../schemas/CropIssues';
-import { Crops } from '../../components/Crops';
-import { CustomHeader } from '../../components/CustomHeader';
+import { baseUri, folderPath } from '../../services/config';
+import { Link } from 'expo-router';
+import { useQueries } from '../../hooks/useQueries';
+import { useAuth } from '../../context/AuthContext';
+import { Query } from '../../schemas/Query';
 
 export default function Home() {
+    const { authState } = useAuth();
+    const queryHook = useQueries();
+    const queriesResults = queryHook.items(authState?.user);
+    const [queries, setQueries] = useState(queriesResults);
+
     const categoriesHook = useCategories();
     const categories = categoriesHook.items();
 
@@ -29,9 +42,11 @@ export default function Home() {
     const cropsIssuesHook = useCropIssues();
     const cropsIssues = cropsIssuesHook.items();
 
+    const [headerActive, setHeaderActive] = useState(true);
     const [phrase, setPhrase] = useState('');
 
-    const subscription = useRealmSubscriptions(['Crop', 'CropIssues', 'Category']);
+    const subscription = useRealmSubscriptions(['Crop', 'CropIssues', 'Category', 'Query']);
+
     const { images, setState, toDownload, appState } = useStore((state) => ({
         images: state.images,
         setState: state.setState,
@@ -39,8 +54,12 @@ export default function Home() {
         appState: state.appState,
     }));
 
+    const {
+        ref,
+        onScroll } = useScrollBar({});
+
     const { imagePaths, pathsLoaded } = useImagesLoader(folderPath, baseUri);
-    
+
     useEffect(() => {
         subscription.subscribe();
         return () => {
@@ -50,12 +69,13 @@ export default function Home() {
 
 
     useEffect(() => {
-       if(phrase!) {
-            const cropItems = cropsHook.findByName(phrase);
+        if (phrase!) {
+            // trim phrase value
+            const cropItems = cropsHook.findByName(phrase.trim());
             setCrops(cropItems);
-       } else {
+        } else {
             setCrops(cropsResults);
-       }
+        }
     }, [phrase]);
 
     useEffect(() => {
@@ -70,7 +90,8 @@ export default function Home() {
                 const cropImages = getImages(crops);
                 const cropIssuesImages = getImages(cropsIssues);
                 const categoriesImages = getImages(categories);
-                const imagestdl = [...cropImages, ...cropIssuesImages, ...categoriesImages];
+                const queriesImages = getImages(queries);
+                const imagestdl = [...cropImages, ...cropIssuesImages, ...categoriesImages, ...queriesImages];
 
                 const imagesToDownload = [];
                 for (let img of imagestdl) {
@@ -88,25 +109,50 @@ export default function Home() {
 
     }, [categories, crops, cropsIssues, pathsLoaded]);
 
-    const getImages = (entity: any[] | Results<Category> | Results<Crop> | Results<CropIssues>) => {
+    const getImages = (entity: any[] | Results<Category> | Results<Crop> | Results<CropIssues> | Results<Query>) => {
         return (entity as any[]).filter((item: any) => item.imagen !== '').map((item: any) => item.imagen);
     }
 
     return (
         <SafeAreaView style={[tailwind`bg-white h-full`]}>
-            <CustomHeader />
-            <View style={tailwind`pt-12`}></View>
-            <SearchBar phrase={phrase} action={setPhrase} />
-
-            <View style={[tailwind`p-4 pt-2`]}>
-                <View style={[tailwind`mt-0`]}>
-                    <Categories categories={categories}></Categories>
+            <ParallaxScrollView
+                ref={ref}
+                onScroll={onScroll}
+                renderStickyHeader={() => (
+                    <View style={tailwind`bg-white w-full h-20 z-20 absolute`} />
+                )}
+                backgroundColor="transparent"
+                style={{ flex: 1 }}
+                parallaxHeaderHeight={370}
+                stickyHeaderHeight={40}
+                renderBackground={() => (
+                    <View style={[tailwind`bg-white p-2 pt-2 pb-0`]}>
+                        <CustomHeader />
+                        <View style={tailwind`pt-12`}></View>
+                        <SearchBar phrase={phrase} action={setPhrase} />
+                        <View style={[tailwind`px-2 mt-0`]}>
+                            <Categories categories={categories}></Categories>
+                        </View>
+                    </View>
+                )}
+                headerActive={headerActive}
+                backgroundScrollSpeed={3}
+            >
+                <View style={[tailwind`p-4 pt-0`]}>
+                    <View style={[tailwind`mt-0`]}>
+                        {crops.length ? <Crops crops={crops}></Crops> : null}
+                    </View>
                 </View>
-                <View style={[tailwind`mt-0`]}>
-                    <Crops crops={crops}></Crops>
-                </View>
+            </ParallaxScrollView>
 
-            </View>
+            <Animated.View entering={FadeInDown}>
+                <View style={tailwind`absolute bottom-4 right-4 min-w-12 min-h-12 flex`}>
+                    <Link href="/questions" >
+                        <QuestionsIcon style={tailwind`min-w-12 min-h-12`}/>
+                    </Link>
+                </View>
+            </Animated.View>
+            <StatusBar barStyle="dark-content" />
         </SafeAreaView>
     );
 }

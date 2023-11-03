@@ -16,17 +16,17 @@ export function useCommons() {
                 _id: Realm.BSON.ObjectId,
                 localImage: string
             }) {
-            const category = realm.objectForPrimaryKey(collection, _id);
-            if (category) {
+            const collectionObj = realm.objectForPrimaryKey(collection, _id);
+            
+            if (collectionObj) {
                 if (!realm.isInTransaction) {
                     realm.write(() => {
-                        category.localImage = localImage;
+                        collectionObj.localImage = localImage;
                     });
                 } else {
                     setTimeout(() => {
                         this.updateLocalImage({collection, _id, localImage });
                     }, 1000);
-
                 }
 
             }

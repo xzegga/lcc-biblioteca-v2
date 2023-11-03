@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useApp, UserProvider } from '@realm/react';
 import { useAuth } from '../../context/AuthContext';
 import { RealmApp } from './RealmApp';
-import { Text } from 'react-native';
 
 /*
     * This component is responsible for getting the current user from the Realm app

@@ -24,7 +24,7 @@ export function CustomHeader() {
         <SafeAreaView style={[tailwind`flex`, SafeViewAndroid.AndroidSafeArea]}>
             <View style={tailwind`
                 flex h-[12]
-                px-3
+                px-2
                 bg-white
                 flex-row items-center
                 justify-between`}>

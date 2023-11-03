@@ -5,9 +5,14 @@ export const AxiosClient = (function () {
   let instance: any;
   let tokenInstance: string;
 
-  function createAxiosClient(token: string) {
+  function createAxiosClient(token: string, multipart = false) {
     const axiosInstance = axios.create({
       baseURL: `${Config.apiUrl}/wp-json/`,
+      ...(multipart ? {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      } : {}),
     });
     // Add a request interceptor
     if (token !== '') {
@@ -19,6 +24,7 @@ export const AxiosClient = (function () {
           return config;
         },
         (error) => {
+          console.log({ error });
           return Promise.reject(error);
         }
       );
@@ -28,20 +34,20 @@ export const AxiosClient = (function () {
   }
 
   return {
-    create(token: string) {
-      this.set(token);
+    create(token: string, multipart?: boolean) {
+      this.set(token, multipart);
     },
-    get(token: string) {
+    get(token: string, multipart?: boolean) {
       if (
         tokenInstance !== token ||
         !instance
       ) {
-        this.set(token);
+        this.set(token, multipart);
       }
       return instance;
     },
-    set(token: string) {
-      instance = createAxiosClient(token);
+    set(token: string, multipart?: boolean) {
+      instance = createAxiosClient(token, multipart);
       tokenInstance = token;
     },
   };

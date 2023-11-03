@@ -1,8 +1,6 @@
 import { useRealm } from "@realm/react";
-import { useCallback, useRef } from "react";
-import { useCategories } from "./useCategories";
+import { useCallback } from "react";
 import { useCommons } from "./useCommons";
-
 
 function compareImages(obj1: any): boolean {
     if ('imagen' in obj1) {
@@ -15,26 +13,29 @@ function compareImages(obj1: any): boolean {
 
 export default function useRealmSubscriptions(collections: Array<string>) {
     const realm = useRealm();
-    const categories = useCommons();
+    const collectionSchema = useCommons();
 
     return {
         subscribe: useCallback(() => {
             // Create a subscription for every collection in the array
             collections.forEach((collection) => {
                 const obj = realm.objects(collection);
-                obj.addListener((object, changes) => {
-                    changes.newModifications.forEach((index) => {
-                        if (compareImages(object[index])) {
-                            categories.updateLocalImage({
-                                collection,
-                                _id: object[index]._id as Realm.BSON.ObjectId,
-                                localImage: object[index].imagen as string
-                            })
-                        };
+                try {
+                    obj.addListener((object, changes) => {
+                        changes.newModifications.forEach((index) => {
+                            if (compareImages(object[index])) {
+                                collectionSchema.updateLocalImage({
+                                    collection,
+                                    _id: object[index]._id as Realm.BSON.ObjectId,
+                                    localImage: object[index].imagen as string
+                                })
+                            };
+                        });
                     });
-                });
+                } catch (error) {
+                    console.log(error);
+                }
             });
-
         }, [collections]),
         unsubscribe() {
             // Clean up the listener when the component unmounts.

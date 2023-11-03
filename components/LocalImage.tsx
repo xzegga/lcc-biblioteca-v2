@@ -12,15 +12,10 @@ export default function LocalImage({ source }: { source: string | undefined }) {
         setState: state.setState,
         toDownload: state.toDownload
     }));
-    const textRef = useRef<string | null>(null);;
-
-    const handleImageError = () => {
-        setImageError(true);
-    };
 
     // check if image exists in source or image[source]
     const imageExists = () => {
-        if (images && source in images) {
+        if (images && source && source in images) {
             return images[source];
         }
 

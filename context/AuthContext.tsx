@@ -3,9 +3,12 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 
 import { AxiosClient } from '../services/axiosClient';
+import jwtDecode from 'jwt-decode';
 
 interface AuthState {
     token: string | null;
+    realmApi: string;
+    user: any;
     authenticated: boolean | null;
 }
 
@@ -37,6 +40,8 @@ export const AuthProvider = ({ children }: any) => {
     const axiosClient = AxiosClient.get('');
     const [authState, setAuthState] = useState<AuthState>({
         token: null,
+        realmApi: '',
+        user: null,
         authenticated: null,
     });
     const [user, setUser] = useState<any>();
@@ -44,10 +49,14 @@ export const AuthProvider = ({ children }: any) => {
     useEffect(() => {
         const loadToken = async () => {
             const token = await SecureStore.getItemAsync(TOKEN_KEY);
+            const realmApi = await SecureStore.getItemAsync(REALM_API_ID);
 
             if (token) {
+                const decoded = jwtDecode(token) as any;
                 setAuthState({
                     token,
+                    realmApi: realmApi || '',
+                    user: decoded.name || '',
                     authenticated: true,
                 });
             }
@@ -81,18 +90,17 @@ export const AuthProvider = ({ children }: any) => {
                     await SecureStore.setItemAsync(REALM_API_ID, api_credentials.data.api_id);
                     await SecureStore.setItemAsync(REALM_API_KEY, api_credentials.data.api_key);
                     await SecureStore.setItemAsync(GPT_API_KEY, api_credentials.data.gpt_api_key);
-                    console.log(api_credentials.data.gpt_api_key);
                 }
 
+                const decoded = jwtDecode(jwt_token) as any;
                 setAuthState({
                     token: jwt_token,
+                    realmApi: api_credentials.data.api_id,
+                    user: decoded.name,
                     authenticated: true,
                 });
+                return result;
             }
-
-
-
-            return result;
         } catch (error) {
             Alert.alert(
                 'Error de autenticación',
@@ -110,6 +118,8 @@ export const AuthProvider = ({ children }: any) => {
 
         setAuthState({
             token: null,
+            realmApi: '',
+            user: null,
             authenticated: false,
         });
     }
@@ -129,7 +139,7 @@ export const AuthProvider = ({ children }: any) => {
         }
         // If the app is offline, but credentials are
         // cached, return existing user.
-        //setUser(app.currentUser!);
+        setUser(app.currentUser!);
 
         return app.currentUser!;
     };

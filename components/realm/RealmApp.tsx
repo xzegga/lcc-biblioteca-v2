@@ -1,5 +1,6 @@
 import { RealmProvider, useUser } from '@realm/react';
 import { openLocal, realmConfig } from '../../context/RealmContext';
+
 /*
     * This component is responsible for rendering the Home component.
     *
@@ -9,7 +10,7 @@ import { openLocal, realmConfig } from '../../context/RealmContext';
 export function RealmApp({children}:{children: React.ReactNode}) {
     const user = useUser();
     return (
-        <RealmProvider {...realmConfig}            
+        <RealmProvider {...realmConfig}
             fallback={() => null}
             closeOnUnmount={false}
             {...(user.providerType !== "anon-user" ? {
@@ -18,18 +19,19 @@ export function RealmApp({children}:{children: React.ReactNode}) {
                     existingRealmFileBehavior: openLocal,
                     newRealmFileBehavior: openLocal,
                     onError: (_session, error) => {
-                        //console.log(error);
+                        console.log(error);
                     },
                     initialSubscriptions: {
                         update(subs, realm) {
                             subs.add(realm.objects('Crop'));
                             subs.add(realm.objects('Category'));
                             subs.add(realm.objects('CropIssues'));
+                            subs.add(realm.objects('Query'));
                         },
                     },
                 }
             } : {})}>
-            {user ? children : null}
+            { children }
         </RealmProvider>
     );
 }

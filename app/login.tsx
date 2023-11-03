@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useRootNavigationState, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
     Image, ImageBackground, Pressable, Text, TextInput, TouchableOpacity, View
@@ -13,6 +13,8 @@ export default function LoginScreen() {
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('');
     const { login } = useAuth();
+    const rootNavigationState = useRootNavigationState();
+    
     const { authState } = useAuth();
     const router = useRouter();
 
@@ -24,7 +26,7 @@ export default function LoginScreen() {
     }
 
     useEffect(() => {
-        if(authState?.authenticated == true) {
+        if(authState?.authenticated == true && rootNavigationState?.key ) {
             router.push("/");
         }
     }, [authState?.authenticated]);

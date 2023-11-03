@@ -14,4 +14,5 @@ export const initialGlobalState = {
   toDownload: [] as string[],
   appState: 'loading' as AppState,
   selectedCategory: {} as Category,
+  selectedCrop: null as any,
 };

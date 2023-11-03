@@ -6,7 +6,7 @@ export function Categories({ categories }: { categories: any }) {
 
     return (
         <View>
-            <Text style={tailwind`text-lg pb-1 text-green-900 `}>Categorías</Text>
+            <Text style={tailwind`text-lg py-2 text-green-900 `}>Categorías</Text>
             <ScrollView horizontal>
                 {categories.map((category: any) => (
                     <View key={category._id.toString()} style={tailwind`pb-4`}>

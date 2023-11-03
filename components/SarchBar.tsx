@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { TextInput, TouchableOpacity, View } from 'react-native';
+import { Pressable, TextInput, TouchableOpacity, View } from 'react-native';
 import tailwind from 'twrnc';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -8,9 +7,6 @@ export function SearchBar({ phrase, action }: {
     phrase: string,
     action: React.Dispatch<React.SetStateAction<string>>
 }) {
-    // Search phrase string in all properties of all database realm collections
-    const [name, setName] = useState(phrase);
-
     return (
         <View style={tailwind`
             flex h-[12]
@@ -29,14 +25,12 @@ export function SearchBar({ phrase, action }: {
                     onChangeText={action}
                     value={phrase}
                     placeholder="Buscar"
+                    style={tailwind`flex-1 h-[9]`}
                 />
+                <Pressable onPress={() => action('')} style={tailwind`w-6`}>
+                    <Ionicons name="close" size={24} color="black" />
+                </Pressable>
             </View>
-            <TouchableOpacity
-                style={tailwind`flex flex-row items-center justify-center px-4 py-2`}
-                onPress={() => { console.log('Search') }}
-            >
-                <Ionicons name="add" size={20} color="green" />
-            </TouchableOpacity>
         </View>
     );
 

@@ -1,8 +1,9 @@
-import { Redirect, Stack, useRootNavigationState } from 'expo-router';
+import { Redirect, Slot, Stack, useRootNavigationState } from 'expo-router';
 
-import RealmWrapper from '../../components/realm/RealmWrapper';
 import { useAuth } from '../../context/AuthContext';
-import { useMemo } from 'react';
+import { View } from 'react-native';
+import tailwind from 'twrnc';
+import { LoaderHome } from '../../components/LoaderHome';
 
 export default function Layout() {
   const rootNavigationState = useRootNavigationState();
@@ -11,12 +12,11 @@ export default function Layout() {
   if (!authState?.authenticated && rootNavigationState?.key) return <Redirect href="/login" />;
 
   return (
-    <RealmWrapper>
-      <Stack screenOptions={{
+    <>{
+      !rootNavigationState?.stale ? <Stack screenOptions={{
         headerShown: false,
-      }}>
-        <Stack.Screen name="index" />
-      </Stack>
-    </RealmWrapper>
+      }} /> : <View style={[tailwind`px-6 pt-30`]}><LoaderHome /></View>
+    }
+    </>
   );
 }

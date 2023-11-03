@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Animated, Dimensions, View, StyleSheet } from 'react-native'
+import { Animated, Dimensions, View, StyleSheet, Text } from 'react-native'
 import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import { bool, func, number, string } from 'prop-types'
+import { LinearGradient } from 'expo-linear-gradient';
 
 const window = Dimensions.get('window')
 
@@ -39,7 +40,8 @@ const IPropTypes = {
 	renderStickyHeader: func,
 	stickyHeaderHeight: number,
 	contentContainerStyle: ViewPropTypes.style,
-	outputScaleValue: number
+	outputScaleValue: number,
+	headerActive: bool,
 }
 
 export default class ParallaxScrollView extends Component {
@@ -90,6 +92,7 @@ export default class ParallaxScrollView extends Component {
 			style,
 			contentContainerStyle,
 			outputScaleValue,
+			headerActive,
 			...scrollViewProps
 		} = this.props
 
@@ -100,7 +103,8 @@ export default class ParallaxScrollView extends Component {
 			parallaxHeaderHeight,
 			stickyHeaderHeight,
 			renderBackground,
-			outputScaleValue
+			outputScaleValue,
+			headerActive
 		})
 		const foreground = this._renderForeground({
 			fadeOutForeground,
@@ -226,7 +230,8 @@ export default class ParallaxScrollView extends Component {
 		parallaxHeaderHeight,
 		stickyHeaderHeight,
 		renderBackground,
-		outputScaleValue
+		outputScaleValue,
+		headerActive
 	}) {
 		const { viewWidth, viewHeight } = this.state
 		const { scrollY } = this
@@ -234,7 +239,7 @@ export default class ParallaxScrollView extends Component {
 		return (
 			<Animated.View
 				style={[
-					styles.backgroundImage,
+				 	styles.backgroundImage,
 					{
 						backgroundColor: backgroundColor,
 						height: parallaxHeaderHeight,
@@ -262,13 +267,21 @@ export default class ParallaxScrollView extends Component {
 									extrapolate: 'clamp'
 								})
 							}
-						]
-					}
+						],
+					},
+					headerActive ? { zIndex: 1 } : { zIndex: 0 }
+
 				]}
-			>
+			>				
 				<View>
 					{renderBackground()}
 				</View>
+				{headerActive && 
+					<LinearGradient
+					colors={['rgba(255,255,255,1)', 'rgba(255,255,255,0.6)', 'transparent']}
+					style={styles.bottomGradient}
+				/>}
+				
 			</Animated.View>
 		)
 	}
@@ -434,7 +447,8 @@ ParallaxScrollView.defaultProps = {
 	renderForeground: null,
 	stickyHeaderHeight: 0,
 	contentContainerStyle: null,
-	outputScaleValue: 5
+	outputScaleValue: 5,
+	headerActive: false,
 }
 
 
@@ -455,7 +469,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: 'transparent',
     overflow: 'hidden',
-    top: 0
+    top: 1,
   },
   stickyHeader: {
     backgroundColor: 'transparent',
@@ -466,6 +480,10 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     backgroundColor: 'transparent'
+  },
+  bottomGradient: {
+    height: 20,
+	background: 'white',
   }
 });
 

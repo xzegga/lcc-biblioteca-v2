@@ -48,7 +48,7 @@ export function Crops({ crops }: { crops: any }) {
             <ScrollView style={tailwind`mb-30`}>
                 {crops.map((crops: any) => (
                     <View key={crops._id.toString()} >
-                        <Crop crop={crops}></Crop>
+                        <Crop crop={crops} />
                     </View>
                 ))}
             </ScrollView>

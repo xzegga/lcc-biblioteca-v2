@@ -14,7 +14,6 @@ export default function QueryService(token: string) {
 
                 if (response?.id) {
                     const img = data.qs_image ? await this.upload(data.qs_image) : null;
-
                     const params = {
                         acf: {
                             ...data,
@@ -29,21 +28,17 @@ export default function QueryService(token: string) {
                 return error;
             }
         },
-        async upload(image: any) {
+        async upload(uri: any) {
 
-            const name = image.split("/").pop();
+            const name = uri.split("/").pop();
             const match = /\.(\w+)$/.exec(name as string);
             const type = match ? `image/*` : `image`;
 
             let formData = new FormData();
 
-            formData.append("file", {
-                uri: image,
-                name: name,
-                type: type
-            } as any);
+            formData.append("file", { uri, name,type } as any);
 
-            const img = (await axiosClientMultipart.post('/wp/v2/media', formData)).data; 
+            const img = (await axiosClientMultipart.post('/wp/v2/media', formData)).data;
             return img;
         }
 

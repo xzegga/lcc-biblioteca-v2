@@ -36,7 +36,7 @@ export default function QueryService(token: string) {
 
             let formData = new FormData();
 
-            formData.append("file", { uri, name,type } as any);
+            formData.append("file", { uri, name, type } as any);
 
             const img = (await axiosClientMultipart.post('/wp/v2/media', formData)).data;
             return img;

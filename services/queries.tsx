@@ -14,11 +14,11 @@ export default function QueryService(token: string) {
           .data;
 
         if (response?.id) {
-          const img = data.qs_image ? await this.upload(data.qs_image) : null;
+          const img = data.imagen ? await this.upload(data.imagen) : null;
           const params = {
             acf: {
               ...data,
-              qs_image: img.id,
+              imagen: img.id as number,
             },
           };
           await axiosClient.post(`/wp/v2/consulta/${response.id}`, params);

@@ -1,5 +1,6 @@
 import { RealmProvider, useUser } from "@realm/react";
 import { openLocal, realmConfig } from "../../context/RealmContext";
+import { Schemas } from "../../schemas/Schemas";
 
 /*
  * This component is responsible for rendering the Home component.
@@ -25,10 +26,11 @@ export function RealmApp({ children }: { children: React.ReactNode }) {
               },
               initialSubscriptions: {
                 update(subs, realm) {
-                  subs.add(realm.objects("Crop"));
-                  subs.add(realm.objects("Category"));
-                  subs.add(realm.objects("CropIssues"));
-                  subs.add(realm.objects("Query"));
+                  subs.add(realm.objects(Schemas.CROP));
+                  subs.add(realm.objects(Schemas.CATEGORY));
+                  subs.add(realm.objects(Schemas.CROPISSUES));
+                  subs.add(realm.objects(Schemas.QUERY));
+                  subs.add(realm.objects(Schemas.QUERYLOCAL));
                 },
               },
             },
@@ -39,3 +41,5 @@ export function RealmApp({ children }: { children: React.ReactNode }) {
     </RealmProvider>
   );
 }
+
+

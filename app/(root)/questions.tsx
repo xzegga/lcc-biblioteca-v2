@@ -39,8 +39,10 @@ export default function Questions() {
     if (authState?.user) {
       const post = {
         qs_request: question,
-        qs_image: image,
-        qs_date_question: new Date(),
+        imagen: image,
+        qs_date_question: new Date().toISOString(),
+        qs_answer: "",
+        qs_date_answer: "",
         qs_user: authState.user,
       };
       setLoading(true);
@@ -62,6 +64,7 @@ export default function Questions() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       aspect: [4, 3],
+      allowsEditing: true,
       quality: 1,
     });
 
@@ -75,6 +78,7 @@ export default function Questions() {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       aspect: [4, 3],
+      allowsEditing: true,
       quality: 1,
     });
 
@@ -135,49 +139,54 @@ export default function Questions() {
                 />
               </View>
             )}
-            <View
-              style={tailwind`pt-4 flex flex-row justify-start items-center`}
-            >
-              <Text
-                style={tailwind`text-base font-normal leading-6 text-slate-600 mr-4`}
+            <View style={tailwind`flex flex-row justify-end items-end mb-10`}>
+
+              <View
+                style={tailwind`pt-4`}
               >
-                Seleccionar imagen
-              </Text>
-              <View style={tailwind`flex flex-row items-center gap-2`}>
-                <TouchableOpacity
-                  onPress={takePhoto}
-                  style={tailwind`flex flex-row items-center`}
+                <Text
+                  style={tailwind`text-base font-normal leading-6 text-slate-600 mr-4`}
                 >
-                  <EvilIcons name="camera" size={28} color="orange" />
-                </TouchableOpacity>
+                  Seleccionar imagen
+                </Text>
+                <View style={tailwind`flex flex-row items-center gap-2`}>
+                  <TouchableOpacity
+                    onPress={takePhoto}
+                    style={tailwind`flex flex-row items-center`}
+                  >
+                    <EvilIcons name="camera" size={42} color="orange" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={pickImage}
+                    style={tailwind`flex flex-row items-center`}
+                  >
+                    <EvilIcons name="image" size={42} color="green" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setImage(null)}
+                    style={tailwind`flex flex-row items-center`}
+                  >
+                    <EvilIcons name="trash" size={42} color="red" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={tailwind`ml-auto pt-4`}>
                 <TouchableOpacity
-                  onPress={pickImage}
-                  style={tailwind`flex flex-row items-center`}
+                  onPress={postQuery}
+                  disabled={question === "" || image === null || loading}
+                  style={tailwind`h-10 bg-orange-500 w-25 rounded-md flex flex-row justify-center items-center px-6`}
                 >
-                  <EvilIcons name="image" size={28} color="green" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => setImage(null)}
-                  style={tailwind`flex flex-row items-center`}
-                >
-                  <EvilIcons name="trash" size={28} color="red" />
+                  <View style={tailwind`flex-1 flex items-center`}>
+                    <Text
+                      style={tailwind`text-white text-base font-medium text-center`}
+                    >
+                      Enviar
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={tailwind`ml-auto pt-4 mb-6`}>
-              <TouchableOpacity
-                onPress={postQuery}
-                style={tailwind`h-10 bg-orange-500 w-25 rounded-md flex flex-row justify-center items-center px-6`}
-              >
-                <View style={tailwind`flex-1 flex items-center`}>
-                  <Text
-                    style={tailwind`text-white text-base font-medium text-center`}
-                  >
-                    Enviar
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+
           </View>
           <View>
             <Text style={tailwind`text-lg py-2 text-green-900 font-semibold`}>
@@ -186,32 +195,55 @@ export default function Questions() {
             <View>
               {queryItems?.length ? (
                 <>
-                  {queryItems.map((item: any) => {
+                  {queryItems.map((item: any, index) => {
                     return (
-                      <View
-                        key={item._id}
-                        style={tailwind`border border-gray-300 rounded-md p-2 mb-2`}
-                      >
-                        {item.imagen && (
-                          <View
-                            style={tailwind`w-20 h-20 overflow-hidden mt-2`}
-                          >
-                            <LocalImage source={item.imagen} />
-                          </View>
-                        )}
+                      <View key={index}>
                         <View
-                          style={tailwind`flex flex-row justify-between items-center`}
+                          style={tailwind`flex flex-row gap-3 justify-between items-center 
+                        border-0 border-b-[1px] border-gray-300 rounded-md p-2 mb-2`}
                         >
-                          <Text
-                            style={tailwind`text-base font-medium text-slate-600`}
+
+                          <View
+                            style={tailwind`flex flex-row gap-3 justify-between items-start`}
                           >
-                            {item.qs_request}
-                          </Text>
-                          <Text
-                            style={tailwind`text-xs font-medium text-slate-600`}
-                          >
-                            {formatDate(item.qs_date_question)}
-                          </Text>
+                            {item.imagen && (
+                              <View
+                                style={tailwind`w-20 h-20 overflow-hidden mt-0 rounded-md`}
+                              >
+                                <LocalImage source={item.imagen} />
+                              </View>
+                            )}
+
+                            <View style={tailwind`w-fit pr-4 flex-1`}>
+                              <View style={tailwind`pb-2`}>
+                                <Text
+                                  style={tailwind`text-xs font-medium text-slate-600`}
+                                >
+                                  {formatDate(item.qs_date_question)}
+                                </Text>
+                                <Text
+                                  style={tailwind`text-base font-medium text-slate-600`}
+                                >
+                                  {item.qs_request}
+                                </Text>
+
+                              </View>
+                              {item.qs_answer! ? (
+                                <View >
+                                  <Text style={tailwind`text-base font-normal text-slate-600`}>
+                                    {item.qs_answer}</Text>
+                                  <Text
+                                    style={tailwind`text-xs font-medium text-slate-600  self-end`}
+                                  >
+                                    {formatDate(item.qs_date_answer)}
+                                  </Text>
+                                </View>
+                              ) : <Text>Sin respuesta por el momento</Text>}
+
+                            </View>
+
+                          </View>
+
                         </View>
                       </View>
                     );

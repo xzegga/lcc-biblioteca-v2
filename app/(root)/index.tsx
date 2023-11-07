@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView, StatusBar, View, Text } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { Results } from "realm/dist/bundle";
@@ -25,9 +25,13 @@ import { Link } from "expo-router";
 import { useQueries } from "../../hooks/useQueries";
 import { useAuth } from "../../context/AuthContext";
 import { Query } from "../../schemas/Query";
+import useUpdateQuery from "../../hooks/useUpdateQueries";
+import { Schemas } from "../../schemas/Schemas";
 
-export default function Home() {
+export default function Home() {  
   const { authState } = useAuth();
+  const { networkStatus } = useUpdateQuery();
+
   const queryHook = useQueries();
   const queriesResults = queryHook.items(authState?.user);
   const [queries, setQueries] = useState(queriesResults);
@@ -46,10 +50,10 @@ export default function Home() {
   const [phrase, setPhrase] = useState("");
 
   const subscription = useRealmSubscriptions([
-    "Crop",
-    "CropIssues",
-    "Category",
-    "Query",
+    Schemas.CROP,
+    Schemas.CROPISSUES,
+    Schemas.CATEGORY,
+    Schemas.QUERY,
   ]);
 
   const { images, setState, toDownload, appState } = useStore((state) => ({
@@ -98,12 +102,12 @@ export default function Home() {
         const cropImages = getImages(crops);
         const cropIssuesImages = getImages(cropsIssues);
         const categoriesImages = getImages(categories);
-        const queriesImages = getImages(queries);
+        const queryImages = getImages(queries);
         const imagestdl = [
           ...cropImages,
           ...cropIssuesImages,
           ...categoriesImages,
-          ...queriesImages,
+          ...queryImages,
         ];
 
         const imagesToDownload = [];
@@ -119,7 +123,7 @@ export default function Home() {
       }
     };
     download();
-  }, [categories, crops, cropsIssues, pathsLoaded]);
+  }, [categories, crops, cropsIssues, queries, pathsLoaded]);
 
   const getImages = (
     entity:
@@ -144,7 +148,7 @@ export default function Home() {
         )}
         backgroundColor="transparent"
         style={{ flex: 1 }}
-        parallaxHeaderHeight={370}
+        parallaxHeaderHeight={405}
         stickyHeaderHeight={40}
         renderBackground={() => (
           <View style={[tailwind`bg-white p-2 pt-2 pb-0`]}>
@@ -161,6 +165,7 @@ export default function Home() {
       >
         <View style={[tailwind`p-4 pt-0`]}>
           <View style={[tailwind`mt-0`]}>
+            <Text>{networkStatus}</Text>
             {crops.length ? <Crops crops={crops}></Crops> : null}
           </View>
         </View>

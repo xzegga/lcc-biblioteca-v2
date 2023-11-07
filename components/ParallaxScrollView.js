@@ -285,7 +285,7 @@ export default class ParallaxScrollView extends Component {
           <LinearGradient
             colors={[
               "rgba(255,255,255,1)",
-              "rgba(255,255,255,0.6)",
+              "rgba(255,255,255,0.3)",
               "transparent",
             ]}
             style={styles.bottomGradient}
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   bottomGradient: {
-    height: 20,
+    height: 30,
     background: "white",
   },
 });

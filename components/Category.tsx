@@ -1,9 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import tailwind from "twrnc";
 
 import LocalImage from "./LocalImage";
 import { useStore } from "../hooks/useGlobalStore";
-import { Category as CategoryModel } from "../schemas/Category";
 import { Link } from "expo-router";
 
 export function Category({ category }: { category: any }) {
@@ -24,18 +23,21 @@ export function Category({ category }: { category: any }) {
         style={[
           tailwind`
             flex gap-2 border-[1px] mb-4
-            border-slate-200 rounded-[8px] min-h-[140px]
-            bg-white`,
+            border-slate-200 rounded-[8px]
+            bg-white
+            ${Platform.OS === "ios" ? "h-[160px]" : "min-h-[180px]"}
+            `,
           styles.shadow,
         ]}
       >
-        <View style={tailwind`rounded-t-[8px] w-25 h-25 overflow-hidden`}>
+        <View style={tailwind`rounded-t-[8px] w-30 overflow-hidden
+        ${Platform.OS === "ios" ? "h-[125px]" : "h-[125px]"}`}>
           <LocalImage source={category.imagen} />
         </View>
         <Text
-          style={tailwind`text-xs text-slate-600 max-w-[25] px-1.5 pb-1 leading-[.9rem]`}
+          style={tailwind`text-xs text-slate-600 max-w-[30] px-1.5 leading-[.9rem]`}
         >
-          {category.name}{" "}
+          {category.name}
         </Text>
       </View>
     </Link>

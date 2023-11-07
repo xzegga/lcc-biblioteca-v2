@@ -79,17 +79,17 @@ export default function Details() {
                   <View
                     key={category}
                     style={tailwind` flex
-                                            justify-center
-                                            items-center
-                                            bg-slate-900
-                                            px-3 py-1
-                                            rounded-[60px] ml-2`}
+                      justify-center
+                      items-center
+                      bg-slate-900
+                      px-3 py-1
+                      rounded-[60px] ml-2`}
                   >
                     <Text
                       key={index}
                       style={tailwind`
-                                            text-xs
-                                            text-white`}
+                        text-xs
+                        text-white`}
                     >
                       {shortenText(category, 15)}
                     </Text>

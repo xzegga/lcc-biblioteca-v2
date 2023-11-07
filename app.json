@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "lcc-biblioteca-v2",
+    "name": "Biblioteca Virtual",
     "slug": "lcc-biblioteca-v2",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,8 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.xzegga.lccbibliotecav2"
+      "bundleIdentifier": "com.xzegga.lccbibliotecav2",
+      "appDisplayName": "LCC Biblioteca v2"
     },
     "android": {
       "adaptiveIcon": {

@@ -15,4 +15,5 @@ export const initialGlobalState = {
   appState: "loading" as AppState,
   selectedCategory: {} as Category,
   selectedCrop: null as any,
+  networkStatus: false,
 };

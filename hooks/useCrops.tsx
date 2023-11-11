@@ -19,7 +19,9 @@ export function useCrops() {
       return realm.objectForPrimaryKey(Crop, _id);
     },
     findByCategory(categoryId: number) {
-      return realm.objects(Crop).filtered("categories IN $0", [categoryId]);
+      return realm.objects(Crop)
+        .filtered("categories IN $0", [categoryId])
+        .sorted("title", false);
     },
     getNamesByIds(ids: number[] = []) {
       return ids.map((id) => {

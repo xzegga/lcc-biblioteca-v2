@@ -14,7 +14,7 @@ export function useCropIssues() {
         ? useQuery(CropIssues).sorted("title", false)
         : [];
     },
-    findByCrop(cropId: number, type: string = "patologias") {
+    findByCrop(cropId: number, type: string = "patologia") {
       if (!cropId) return [];
 
       let crops = realm

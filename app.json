@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.xzegga.lccbibliotecav2",
@@ -23,7 +25,10 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.xzegga.lccbibliotecav2"
+      "package": "com.xzegga.lccbibliotecav2",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -38,6 +43,12 @@
           "photosPermission": "Allow $(PRODUCT_NAME) to access your photo",
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
         }
+      ],
+      [
+        "expo-updates",
+        {
+          "username": "xzegga"
+        }
       ]
     ],
     "experiments": {
@@ -50,6 +61,13 @@
       "eas": {
         "projectId": "9361fcf4-a8be-4481-9c3e-106d488787b1"
       }
+    },
+    "owner": "lacanastacampesina",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9361fcf4-a8be-4481-9c3e-106d488787b1"
     }
   }
 }

@@ -27,6 +27,8 @@ import { useAuth } from "../../context/AuthContext";
 import { Query } from "../../schemas/Query";
 import useUpdateQuery from "../../hooks/useUpdateQueries";
 import { Schemas } from "../../schemas/Schemas";
+import useUpdateApp from "../../hooks/useUpdateApp";
+
 
 export default function Home() {  
   const { authState } = useAuth();
@@ -49,6 +51,8 @@ export default function Home() {
   const [headerActive, setHeaderActive] = useState(true);
   const [phrase, setPhrase] = useState("");
 
+  const  { onFetchUpdateAsync } = useUpdateApp();
+
   const subscription = useRealmSubscriptions([
     Schemas.CROP,
     Schemas.CROPISSUES,
@@ -68,6 +72,7 @@ export default function Home() {
   const { imagePaths, pathsLoaded } = useImagesLoader(folderPath, baseUri);
 
   useEffect(() => {
+    //onFetchUpdateAsync();
     subscription.subscribe();
     return () => {
       subscription.unsubscribe();

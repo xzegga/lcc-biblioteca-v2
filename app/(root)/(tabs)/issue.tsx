@@ -11,18 +11,39 @@ import { AntDesign } from "@expo/vector-icons";
 import { useStore } from "../../../hooks/useGlobalStore";
 import { flattenArray } from "../../../helpers/flatArray";
 
+export function Details({ label, value }: { label: string; value: string }) {
+  return (
+    <View>
+      {value! ? (
+        <View style={tailwind`mt-2`}>
+          <Text
+            style={tailwind`text-base font-semibold pb-1 w-full`}
+          >
+            {label}:
+          </Text>
+          <Text
+            style={tailwind`text-base font-normal pb-1`}
+          >
+            {value}
+          </Text>
+        </View>
+      ) : null}
+    </View>
+  )
+}
+
 export default function Issue() {
   const crops = useCrops();
   const { cropIssueId } = useGlobalSearchParams();
   const issues = useCropIssues();
-  const issueByCrop = cropIssueId
+  const cropIssue = cropIssueId
     ? issues.getById(cropIssueId as string)
     : null;
 
   const cropsControlIds =
-    issueByCrop?.controls?.map((control: any) => control.crop) || [];
+    cropIssue?.controls?.map((control: any) => control.crop) || [];
 
-  const cropIssueIds = issueByCrop?.crop || [];
+  const cropIssueIds = cropIssue?.crop || [];
   const uniqueIds = new Set(
     flattenArray([...cropIssueIds, ...cropsControlIds]),
   );
@@ -32,6 +53,7 @@ export default function Issue() {
   const { selectedCrop } = useStore((state) => ({
     selectedCrop: state.selectedCrop,
   }));
+
   const crop = crops.getById(selectedCrop);
 
   const {
@@ -42,9 +64,11 @@ export default function Issue() {
     onChangeHeaderVisibility,
   } = useScrollBar({ fixedHeader: true });
 
+  console.log({issueByCrop: JSON.stringify(cropIssue?.controls, null, 2)})
+
   return (
     <SafeAreaView style={[tailwind`bg-white h-full`]}>
-      {issueByCrop ? (
+      {cropIssue ? (
         <>
           <ParallaxScrollView
             ref={ref}
@@ -57,7 +81,7 @@ export default function Issue() {
             style={{ flex: 1 }}
             renderBackground={() => (
               <View style={[tailwind`bg-white overflow-hidden`]}>
-                <LocalImage source={issueByCrop.imagen} />
+                <LocalImage source={cropIssue.imagen} />
               </View>
             )}
             parallaxHeaderHeight={300}
@@ -70,20 +94,20 @@ export default function Issue() {
                 <Text
                   style={tailwind`text-[2rem] font-extrabold text-teal-900`}
                 >
-                  {issueByCrop.title}
+                  {cropIssue.title}
                 </Text>
-                {issueByCrop.scientific_name && (
+                {cropIssue.scientific_name && (
                   <Text
                     style={tailwind`text-sm md:text-lg font-normal text-slate-500 mb-3`}
                   >
-                    {issueByCrop.scientific_name}
+                    {cropIssue.scientific_name}
                   </Text>
                 )}
-                {issueByCrop.description && (
+                {cropIssue.description && (
                   <Text
                     style={tailwind`text-lg md:text-base pt-3 font-normal text-green-950`}
                   >
-                    {issueByCrop.description}
+                    {cropIssue.description}
                   </Text>
                 )}
               </View>
@@ -113,74 +137,30 @@ export default function Issue() {
               ) : null}
 
               <View style={tailwind`mb-10`}>
-                {issueByCrop?.controls?.length ? (
+                {cropIssue?.controls?.length ? (
                   <View>
-                    {issueByCrop.controls.map((control: any, index: any) => (
-                      <>
+                    {cropIssue.controls.map((control: any, index: any) => (
+                      <View key={index}>
                         {crop &&
-                        (control.crop.includes(crop.id) ||
-                          issueByCrop.crop.includes(crop.id)) ? (
+                          (control.crop.includes(crop.id) ||
+                            cropIssue.crop.includes(crop.id)) ? (
                           <View
-                            key={index}
-                            style={tailwind`flex border-t-[1px] mt-3 pt-3 border-slate-200`}
+
+                            style={tailwind`flex border-t-[1px] mt-3 pt-3 
+                            border-slate-200 mb-5`}
                           >
-                            <View style={tailwind`flex flex-row`}>
-                              <Text
-                                style={tailwind`text-base font-semibold pb-1 min-w-[25]`}
-                              >
-                                Tipo:
-                              </Text>
-                              <Text
-                                style={tailwind`text-base font-normal pb-1 flex-1`}
-                              >
-                                {control.name}
-                              </Text>
-                            </View>
-                            {control.dose && (
-                              <View style={tailwind`flex flex-row`}>
-                                <Text
-                                  style={tailwind`text-base font-semibold pb-1 min-w-[25]`}
-                                >
-                                  Dosis:
-                                </Text>
-                                <Text
-                                  style={tailwind`text-base font-normal pb-1 flex-1`}
-                                >
-                                  {control.dose}
-                                </Text>
-                              </View>
-                            )}
-                            {control.frequency && (
-                              <View style={tailwind`flex flex-row`}>
-                                <Text
-                                  style={tailwind`text-base font-semibold pb-1 min-w-[25]`}
-                                >
-                                  Frecuencia:
-                                </Text>
-                                <Text
-                                  style={tailwind`text-base font-normal pb-1 flex-1`}
-                                >
-                                  {control.frequency}
-                                </Text>
-                              </View>
-                            )}
-                            {control.reccomendation && (
-                              <View style={tailwind`flex mt-2`}>
-                                <Text
-                                  style={tailwind`text-base font-semibold pb-1 min-w-[25]`}
-                                >
-                                  Recomendaciones:
-                                </Text>
-                                <Text
-                                  style={tailwind`text-base font-normal pb-1 flex-1`}
-                                >
-                                  {control.reccomendation}
-                                </Text>
-                              </View>
-                            )}
+                            <Text
+                              style={tailwind`text-lg pb-1 min-w-[25] 
+                              text-lime-700`}
+                            >
+                              {control.name}
+                            </Text>
+                            <Details label="Dosis" value={control.dose} />
+                            <Details label="Frecuencia" value={control.frequency} />
+                            <Details label="Recomendaciones" value={control.recommendation} />
                           </View>
                         ) : null}
-                      </>
+                      </View>
                     ))}
                   </View>
                 ) : null}

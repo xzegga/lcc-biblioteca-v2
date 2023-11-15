@@ -1,6 +1,7 @@
 import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
 import {
+  BackHandler,
   Image,
   SafeAreaView,
   Text,
@@ -25,6 +26,10 @@ export function CustomHeader() {
       setUserName(capitalizeFirstLetter(token.name || ""));
     }
   }, [authState]);
+
+  const close = () => {
+    BackHandler.exitApp();
+  }
 
   return (
     <SafeAreaView style={[tailwind`flex`, SafeViewAndroid.AndroidSafeArea]}>
@@ -52,7 +57,7 @@ export function CustomHeader() {
           <Text style={tailwind`text-green-900 font-medium`}>{userName}</Text>
         </View>
 
-        <TouchableOpacity onPress={logout}>
+        <TouchableOpacity onPress={close}>
           <View
             style={tailwind`
                         bg-white
@@ -62,7 +67,7 @@ export function CustomHeader() {
                         gap-x-1`}
           >
             <Ionicons name="close" size={20} color="green" />
-            <Text style={tailwind`text-green-900 font-medium`}> Salir</Text>
+            <Text style={tailwind`text-green-900 font-medium`}> Cerrar</Text>
           </View>
         </TouchableOpacity>
       </View>

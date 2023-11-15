@@ -20,7 +20,7 @@ export default function useScrollBar({
   };
 
   const renderStickyHeader = () => (
-    <View style={tailwind`w-full h-20 z-14`}>
+    <View style={tailwind`w-full h-20 z-14 absolute`}>
       <BackBtn color="rgb(15 23 42)" />
     </View>
   );
@@ -28,7 +28,7 @@ export default function useScrollBar({
   const renderFixedHeader = () => (
     <>
       {fixedHeaderState ? (
-        <View style={tailwind`w-full h-20 z-10 absolute`}>
+        <View style={tailwind`w-full h-20 z-14 absolute`}>
           <BackBtn color="rgb(255 255 255)" />
         </View>
       ) : null}

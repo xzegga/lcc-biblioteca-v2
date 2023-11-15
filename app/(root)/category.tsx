@@ -24,7 +24,7 @@ export default function Category() {
     renderStickyHeader,
     renderFixedHeader,
     onChangeHeaderVisibility,
-  } = useScrollBar({});
+  } = useScrollBar({ fixedHeader: true });
 
   useEffect(() => {
     const categoryItem = categoryHook.getById(Number(catId)) as any;

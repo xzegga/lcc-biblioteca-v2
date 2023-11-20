@@ -2,9 +2,6 @@ import { useEffect, useRef } from "react";
 import NetInfo from '@react-native-community/netinfo';
 import { useQueries } from "./useQueries";
 import { useStore } from "./useGlobalStore";
-import { useRealm } from "@realm/react";
-import { ProgressDirection, ProgressMode } from "realm";
-import { QueryLocal } from "../schemas/QueryLocal";
 import { useAuth } from "../context/AuthContext";
 
 

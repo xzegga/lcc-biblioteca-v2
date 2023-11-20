@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { SafeAreaView, StatusBar, View, Text } from "react-native";
+import { StatusBar, View, Platform, SafeAreaView } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { Results } from "realm/dist/bundle";
 import tailwind from "twrnc";
@@ -25,14 +25,11 @@ import { Link } from "expo-router";
 import { useQueries } from "../../hooks/useQueries";
 import { useAuth } from "../../context/AuthContext";
 import { Query } from "../../schemas/Query";
-import useUpdateQuery from "../../hooks/useUpdateQueries";
 import { Schemas } from "../../schemas/Schemas";
-import useUpdateApp from "../../hooks/useUpdateApp";
-
+import SafeViewAndroid from "../../components/SafeViewAndroid";
 
 export default function Home() {  
   const { authState } = useAuth();
-  const { networkStatus } = useUpdateQuery();
 
   const queryHook = useQueries();
   const queriesResults = queryHook.items(authState?.user);
@@ -51,7 +48,7 @@ export default function Home() {
   const [headerActive, setHeaderActive] = useState(true);
   const [phrase, setPhrase] = useState("");
 
-  const  { onFetchUpdateAsync } = useUpdateApp();
+  // const  { onFetchUpdateAsync } = useUpdateApp();
 
   const subscription = useRealmSubscriptions([
     Schemas.CROP,
@@ -144,7 +141,7 @@ export default function Home() {
   };
 
   return (
-    <SafeAreaView style={[tailwind`bg-white h-full`]}>
+    <SafeAreaView style={[tailwind`bg-white h-full`, SafeViewAndroid.AndroidSafeArea]}>
       <ParallaxScrollView
         ref={ref}
         onScroll={onScroll}
@@ -153,7 +150,7 @@ export default function Home() {
         )}
         backgroundColor="transparent"
         style={{ flex: 1 }}
-        parallaxHeaderHeight={405}
+        parallaxHeaderHeight={Platform.OS === "ios" ? 380 : 405}
         stickyHeaderHeight={40}
         renderBackground={() => (
           <View style={[tailwind`bg-white p-2 pt-2 pb-0`]}>
@@ -170,7 +167,6 @@ export default function Home() {
       >
         <View style={[tailwind`p-4 pt-0`]}>
           <View style={[tailwind`mt-0`]}>
-            <Text>{networkStatus}</Text>
             {crops.length ? <Crops crops={crops}></Crops> : null}
           </View>
         </View>
@@ -185,7 +181,7 @@ export default function Home() {
           </Link>
         </View>
       </Animated.View>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle="dark-content"/>
     </SafeAreaView>
   );
 }

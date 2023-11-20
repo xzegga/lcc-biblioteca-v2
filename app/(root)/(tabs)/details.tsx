@@ -1,6 +1,6 @@
 import { useGlobalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { StatusBar, Text, View } from "react-native";
 import tailwind from "twrnc";
 
 import LocalImage from "../../../components/LocalImage";
@@ -46,14 +46,14 @@ export default function Details() {
   }, []);
 
   return (
-    <SafeAreaView style={[tailwind`bg-white h-full`]}>
+    <View style={[tailwind`bg-white h-full`]}>
       {crop ? (
         <>
           <ParallaxScrollView
             ref={ref}
             onScroll={onScroll}
             renderFixedHeader={renderFixedHeader}
-            stickyHeaderHeight={70}
+            stickyHeaderHeight={78}
             renderStickyHeader={renderStickyHeader}
             onChangeHeaderVisibility={onChangeHeaderVisibility}
             backgroundColor="white"
@@ -112,6 +112,6 @@ export default function Details() {
       ) : null}
 
       <StatusBar barStyle="light-content" />
-    </SafeAreaView>
+    </View>
   );
 }

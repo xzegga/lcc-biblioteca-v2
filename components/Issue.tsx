@@ -5,7 +5,6 @@ import tailwind from "twrnc";
 import LocalImage from "./LocalImage";
 import { Link } from "expo-router";
 import { CropIssues as CropIssuesSchema } from "../schemas/CropIssues";
-import { Results } from "realm/dist/bundle";
 
 export function Issue({
   issue,

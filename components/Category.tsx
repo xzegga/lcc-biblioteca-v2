@@ -6,10 +6,6 @@ import { useStore } from "../hooks/useGlobalStore";
 import { Link } from "expo-router";
 
 export function Category({ category }: { category: any }) {
-  const { selectedCategory, setState } = useStore((state) => ({
-    selectedCategory: state.selectedCategory,
-    setState: state.setState,
-  }));
 
   return (
     <Link
@@ -17,7 +13,7 @@ export function Category({ category }: { category: any }) {
         pathname: "/category",
         params: { catId: category.id },
       }}
-      style={tailwind`mr-2`}
+      style={tailwind`mr-2 ${Platform.OS === "ios" ? "max-h-[170px]" : "max-h-[180px]"}`}
     >
       <View
         style={[

@@ -1,28 +1,20 @@
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  Animated,
-  StatusBar,
-} from "react-native";
-import tailwind from "twrnc";
-import { CustomHeader } from "../../components/CustomHeader";
-import { EvilIcons } from "@expo/vector-icons";
-import { useState } from "react";
-import * as ImagePicker from "expo-image-picker";
-import { useAuth } from "../../context/AuthContext";
-import { useQueries } from "../../hooks/useQueries";
-import { Image } from "expo-image";
-import LocalImage from "../../components/LocalImage";
-import formatDate from "../../helpers/dateFormatter";
-import Loading from "../../components/Loading";
-import { FadeInDown } from "react-native-reanimated";
-import { Crops } from "../../components/Crops";
-import ParallaxScrollView from "../../components/ParallaxScrollView";
-import useScrollBar from "../../hooks/useScrollBar";
+import { Image } from 'expo-image';
+import * as ImagePicker from 'expo-image-picker';
+import { useEffect, useState } from 'react';
+import { Alert, StatusBar, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import tailwind from 'twrnc';
+
+import { EvilIcons } from '@expo/vector-icons';
+import NetInfo from '@react-native-community/netinfo';
+
+import BackBtn from '../../components/BackAction';
+import Loading from '../../components/Loading';
+import LocalImage from '../../components/LocalImage';
+import { useAuth } from '../../context/AuthContext';
+import formatDate from '../../helpers/dateFormatter';
+import { useQueries } from '../../hooks/useQueries';
+import { useStore } from '../../hooks/useGlobalStore';
 
 export default function Questions() {
   const { authState } = useAuth();
@@ -30,10 +22,23 @@ export default function Questions() {
   const [image, setImage] = useState<string | null>();
   const [question, setQuestion] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [headerActive, setHeaderActive] = useState(true);
   const queryItems = queriesHook.items(authState?.user);
 
-  const { ref, onScroll } = useScrollBar({});
+
+  const { networkStatus, setState } = useStore(state => ({
+    networkStatus: state.networkStatus,
+    setState: state.setState
+  }));
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setState({ networkStatus: (state.isConnected! && state.isInternetReachable!) });
+    });
+
+    return () => {
+      unsubscribe();
+    }
+  }, []);
 
   const postQuery = async () => {
     if (authState?.user) {
@@ -46,7 +51,7 @@ export default function Questions() {
         qs_user: authState.user,
       };
       setLoading(true);
-      const saved = await queriesHook.postQuery(post);
+      const saved = await queriesHook.postQuery(post, networkStatus);
 
       if (saved) {
         setLoading(false);
@@ -88,27 +93,10 @@ export default function Questions() {
   };
 
   return (
-    <SafeAreaView style={[tailwind`bg-white h-full`]}>
-      <ParallaxScrollView
-        ref={ref}
-        onScroll={onScroll}
-        renderStickyHeader={() => (
-          <View style={tailwind`bg-white pb-0 h-20 z-20 absolute`} />
-        )}
-        backgroundColor="transparent"
-        style={{ flex: 1 }}
-        parallaxHeaderHeight={120}
-        stickyHeaderHeight={120}
-        renderBackground={() => (
-          <View style={[tailwind`bg-white p-2 pt-2 pb-0 w-full`]}>
-            <CustomHeader />
-            <View style={tailwind`pt-12`}></View>
-          </View>
-        )}
-        headerActive={headerActive}
-        backgroundScrollSpeed={3}
-      >
-        <View style={[tailwind`px-5 mt-0`]}>
+    <View style={[tailwind`bg-white h-full`]}>
+      <BackBtn color={'rgb(15 23 42)'} />
+      <ScrollView>
+        <View style={[tailwind`px-5 mt-5`]}>
           {loading && <Loading />}
           <Text style={tailwind`text-lg py-2 text-green-900 font-semibold`}>
             Consultas
@@ -214,7 +202,7 @@ export default function Questions() {
                               </View>
                             )}
 
-                            <View style={tailwind`w-fit pr-4 flex-1`}>
+                            <View style={tailwind`w-full pr-4 flex-1`}>
                               <View style={tailwind`pb-2`}>
                                 <Text
                                   style={tailwind`text-xs font-medium text-slate-600`}
@@ -255,8 +243,9 @@ export default function Questions() {
             </View>
           </View>
         </View>
-      </ParallaxScrollView>
+
+      </ScrollView>
       <StatusBar barStyle="dark-content" />
-    </SafeAreaView>
+    </View>
   );
 }

@@ -14,8 +14,8 @@ import { Query } from "../schemas/Query";
 import { QueryLocal } from "../schemas/QueryLocal";
 
 export const openLocal: OpenRealmBehaviorConfiguration = {
-  type: OpenRealmBehaviorType.DownloadBeforeOpen,
-  timeOut: 3000,
+  type: OpenRealmBehaviorType.OpenImmediately,
+  timeOut: 1000,
   timeOutBehavior: OpenRealmTimeOutBehavior.OpenLocalRealm,
 };
 

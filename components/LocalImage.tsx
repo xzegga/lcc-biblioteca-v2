@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import tailwind from "twrnc";
 import { Image } from "expo-image";
 
@@ -6,7 +6,6 @@ import Config from "../services/config";
 import { useStore } from "../hooks/useGlobalStore";
 
 export default function LocalImage({ source }: { source: string | undefined }) {
-  const [imageError, setImageError] = useState(false);
   const { images } = useStore((state) => ({
     images: state.images,
     setState: state.setState,

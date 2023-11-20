@@ -17,8 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.xzegga.lccbibliotecav2",
-      "appDisplayName": "LCC Biblioteca v2"
+      "bundleIdentifier": "com.xzegga.lccbibliotecav2"
     },
     "android": {
       "adaptiveIcon": {

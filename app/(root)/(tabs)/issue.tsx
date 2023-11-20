@@ -1,5 +1,5 @@
 import { useGlobalSearchParams } from "expo-router";
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { StatusBar, Text, View } from "react-native";
 import tailwind from "twrnc";
 
 import LocalImage from "../../../components/LocalImage";
@@ -64,17 +64,15 @@ export default function Issue() {
     onChangeHeaderVisibility,
   } = useScrollBar({ fixedHeader: true });
 
-  console.log({issueByCrop: JSON.stringify(cropIssue?.controls, null, 2)})
-
   return (
-    <SafeAreaView style={[tailwind`bg-white h-full`]}>
+    <View style={[tailwind`bg-white h-full`]}>
       {cropIssue ? (
         <>
           <ParallaxScrollView
             ref={ref}
             onScroll={onScroll}
             renderFixedHeader={renderFixedHeader}
-            stickyHeaderHeight={70}
+            stickyHeaderHeight={78}
             renderStickyHeader={renderStickyHeader}
             onChangeHeaderVisibility={onChangeHeaderVisibility}
             backgroundColor="white"
@@ -171,6 +169,6 @@ export default function Issue() {
       ) : null}
 
       <StatusBar barStyle="light-content" />
-    </SafeAreaView>
+    </View>
   );
 }

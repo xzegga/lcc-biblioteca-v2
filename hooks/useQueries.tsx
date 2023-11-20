@@ -1,15 +1,17 @@
-import { Query } from "../schemas/Query";
-import { QueryLocal } from "../schemas/QueryLocal";
-import Realm from "realm";
-import { useQuery, useRealm } from "@realm/react";
-import { useCollections } from "./useCollections";
-import QueryService from "../services/queries";
-import { useAuth } from "../context/AuthContext";
-import { getUrlPath } from "../helpers/removeDomain";
-import "react-native-get-random-values";
-import { useStore } from "./useGlobalStore";
-import { Schemas } from "../schemas/Schemas";
-import { Alert } from "react-native";
+import 'react-native-get-random-values';
+import { Alert } from 'react-native';
+import Realm from 'realm';
+
+import { useQuery, useRealm } from '@realm/react';
+
+import { useAuth } from '../context/AuthContext';
+import { getUrlPath } from '../helpers/removeDomain';
+import { Query } from '../schemas/Query';
+import { QueryLocal } from '../schemas/QueryLocal';
+import { Schemas } from '../schemas/Schemas';
+import QueryService from '../services/queries';
+import { useCollections } from './useCollections';
+
 
 export function useQueries() {
   const realm = useRealm();
@@ -17,10 +19,6 @@ export function useQueries() {
   const collections = useCollections();
   const { authState } = useAuth();
   const service = QueryService(authState?.token || "");
-
-  const { networkStatus } = useStore(state => ({
-    networkStatus: state.networkStatus
-  }));
 
   return {
     items(user: string) {
@@ -36,6 +34,7 @@ export function useQueries() {
 
       return [...remote, ...locals]
     },
+
     localItems(user: string) {
       return collections.exist(realm, Schemas.QUERYLOCAL)
         ? useQuery(QueryLocal)
@@ -43,17 +42,18 @@ export function useQueries() {
           .sorted("qs_date_question", true)
         : [];
     },
-    async postQuery(data: any) {
+
+    async postQuery(data: any, networkStatus?: boolean) {
       if (networkStatus && data) {
         const saved = await this.saveRemote(data);
         return saved;
-
       } else if (data) {
         const saved = await this.localSave(data);
         Alert.alert("Pregunta pendiente", "No se ha detectado una conección a internet, tu pregunta se guardará en el dispositivo y se enviará cuando se detecte una conección.");
         return saved;
       }
     },
+
     async saveRemote(data: any) {
       const saved = await service.post(data);
       if (saved?.id) {
@@ -66,7 +66,7 @@ export function useQueries() {
               const local = realm.objectForPrimaryKey(QueryLocal, data._id);
               if (local) realm.delete(local);
             }
-
+            console.log(newObjData);
             // Creating new entry on Query schema
             realm.create(Schemas.QUERY, {
               ...newObjData,

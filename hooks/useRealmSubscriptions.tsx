@@ -23,7 +23,6 @@ export default function useRealmSubscriptions(collections: Array<string>) {
         try {
           obj.addListener((object, changes) => {
             changes.newModifications.forEach((index) => {
-              console.log(changes)
               if (compareImages(object[index])) {
                 collectionSchema.updateLocalImage({
                   collection,

@@ -1,14 +1,14 @@
-import { useGlobalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { SafeAreaView, StatusBar, View } from "react-native";
-import tailwind from "twrnc";
+import { useGlobalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { StatusBar, View } from 'react-native';
+import tailwind from 'twrnc';
 
-import { Crops } from "../../components/Crops";
-import LocalImage from "../../components/LocalImage";
-import ParallaxScrollView from "../../components/ParallaxScrollView";
-import { useCategories } from "../../hooks/useCategories";
-import { useCrops } from "../../hooks/useCrops";
-import useScrollBar from "../../hooks/useScrollBar";
+import { Crops } from '../../components/Crops';
+import LocalImage from '../../components/LocalImage';
+import ParallaxScrollView from '../../components/ParallaxScrollView';
+import { useCategories } from '../../hooks/useCategories';
+import { useCrops } from '../../hooks/useCrops';
+import useScrollBar from '../../hooks/useScrollBar';
 
 export default function Category() {
   const [category, setCategory] = useState<any>();
@@ -35,14 +35,13 @@ export default function Category() {
   }, []);
 
   return (
-    <SafeAreaView style={[tailwind`bg-white h-full`]}>
-      {crops && category ? (
-        <>
+      <View style={[tailwind`bg-white h-full`]}>
+      {(crops && category) && (
           <ParallaxScrollView
             ref={ref}
             onScroll={onScroll}
             renderFixedHeader={renderFixedHeader}
-            stickyHeaderHeight={70}
+            stickyHeaderHeight={78}
             renderStickyHeader={renderStickyHeader}
             onChangeHeaderVisibility={onChangeHeaderVisibility}
             backgroundColor="white"
@@ -63,9 +62,8 @@ export default function Category() {
               </View>
             </View>
           </ParallaxScrollView>
-        </>
-      ) : null}
+      )}
       <StatusBar barStyle="light-content" />
-    </SafeAreaView>
+      </View>
   );
 }

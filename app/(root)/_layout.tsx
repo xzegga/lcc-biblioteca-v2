@@ -1,9 +1,9 @@
-import { Redirect, Slot, Stack, useRootNavigationState } from "expo-router";
+import { Redirect, Stack, useRootNavigationState } from 'expo-router';
+import { View } from 'react-native';
+import tailwind from 'twrnc';
 
-import { useAuth } from "../../context/AuthContext";
-import { View } from "react-native";
-import tailwind from "twrnc";
-import { LoaderHome } from "../../components/LoaderHome";
+import { LoaderHome } from '../../components/LoaderHome';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Layout() {
   const rootNavigationState = useRootNavigationState();
@@ -25,6 +25,7 @@ export default function Layout() {
           <LoaderHome />
         </View>
       )}
+
     </>
   );
 }

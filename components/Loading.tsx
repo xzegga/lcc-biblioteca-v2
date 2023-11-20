@@ -3,7 +3,6 @@ import { View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
-  withDelay,
   withRepeat,
   withTiming,
 } from "react-native-reanimated";

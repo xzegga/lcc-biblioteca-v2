@@ -32,7 +32,7 @@ export default function LoginScreen() {
   };
 
   useEffect(() => {
-    if (authState?.authenticated == true && rootNavigationState?.key) {
+    if (authState?.authenticated === true && rootNavigationState?.key) {
       router.push("/");
     }
   }, [authState?.authenticated]);

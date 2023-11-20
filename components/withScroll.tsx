@@ -1,9 +1,6 @@
-import { SafeAreaView, View, StatusBar, StatusBarStyle } from "react-native";
+import { View, StatusBar, StatusBarStyle } from "react-native";
 import tailwind from "twrnc";
-import category from "../app/(root)/category";
 import BackBtn from "./BackAction";
-import { Crops } from "./Crops";
-import LocalImage from "./LocalImage";
 import ParallaxScrollView from "./ParallaxScrollView";
 import { useRef, useState } from "react";
 

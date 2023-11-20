@@ -1,9 +1,6 @@
-import { Image } from "expo-image";
 import { useEffect } from "react";
-import { View } from "react-native";
 import Animated, {
   FadeInDown,
-  SlideInDown,
   useAnimatedStyle,
   useSharedValue,
   withSpring,

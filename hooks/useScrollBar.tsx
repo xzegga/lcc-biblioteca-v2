@@ -5,8 +5,12 @@ import BackBtn from "../components/BackAction";
 
 export default function useScrollBar({
   fixedHeader = false,
+  backBtnColor = "rgb(255 255 255)",
+  backBtnColorOnScroll = "rgb(15 23 42)",
 }: {
   fixedHeader?: boolean;
+  backBtnColor?: string;
+  backBtnColorOnScroll?: string;
 }) {
   const [fixedHeaderState, setFixedHeader] = useState(fixedHeader);
   const ref = useRef<any>();
@@ -21,7 +25,7 @@ export default function useScrollBar({
 
   const renderStickyHeader = () => (
     <View style={tailwind`w-full h-20 z-14 absolute`}>
-      <BackBtn color="rgb(15 23 42)" />
+      <BackBtn color={backBtnColorOnScroll} />
     </View>
   );
 
@@ -29,7 +33,7 @@ export default function useScrollBar({
     <>
       {fixedHeaderState ? (
         <View style={tailwind`w-full h-20 z-14 absolute`}>
-          <BackBtn color="rgb(255 255 255)" />
+          <BackBtn color={backBtnColor} />
         </View>
       ) : null}
     </>

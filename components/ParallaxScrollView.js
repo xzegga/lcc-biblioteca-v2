@@ -286,7 +286,7 @@ export default class ParallaxScrollView extends Component {
             colors={[
               "rgba(255,255,255,1)",
               "rgba(255,255,255,0.3)",
-              "transparent",
+              "rgba(255,255,255,0)",
             ]}
             style={styles.bottomGradient}
           />

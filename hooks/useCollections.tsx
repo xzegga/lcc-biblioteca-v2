@@ -1,5 +1,3 @@
-import { useRealm } from "@realm/react";
-
 export function useCollections() {
   function collectionExists(realm: any, collection: any) {
     return (

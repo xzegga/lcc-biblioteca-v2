@@ -1,7 +1,6 @@
 import { ScrollView, View, Text } from "react-native";
 import tailwind from "twrnc";
 import { Issue } from "./Issue";
-import Animated, { FadeInDown } from "react-native-reanimated";
 import { CropIssues } from "../schemas/CropIssues";
 
 export function Issues({

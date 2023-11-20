@@ -1,4 +1,4 @@
-import { SafeAreaView, StatusBar, View, Text } from "react-native";
+import { StatusBar, View, Text } from "react-native";
 import tailwind from "twrnc";
 
 import useScrollBar from "../hooks/useScrollBar";
@@ -6,7 +6,6 @@ import { Issues } from "./Issues";
 import LocalImage from "./LocalImage";
 import ParallaxScrollView from "./ParallaxScrollView";
 import { CropIssues as CropIssuesSchema } from "../schemas/CropIssues";
-import { Results } from "realm/dist/bundle";
 import React from "react";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import NotFound from "../assets/not-found.svg";
@@ -29,14 +28,14 @@ export default function CropIssues({
   } = useScrollBar({ fixedHeader: true });
 
   return (
-    <SafeAreaView style={[tailwind`bg-white h-full`]}>
+    <View style={[tailwind`bg-white h-full`]}>
       {crop ? (
         <>
           <ParallaxScrollView
             ref={ref}
             onScroll={onScroll}
             renderFixedHeader={renderFixedHeader}
-            stickyHeaderHeight={70}
+            stickyHeaderHeight={78}
             renderStickyHeader={renderStickyHeader}
             onChangeHeaderVisibility={onChangeHeaderVisibility}
             backgroundColor="white"
@@ -83,6 +82,6 @@ export default function CropIssues({
         </>
       ) : null}
       <StatusBar barStyle="light-content" />
-    </SafeAreaView>
+    </View>
   );
 }

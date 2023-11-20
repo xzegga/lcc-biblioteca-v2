@@ -1,5 +1,4 @@
 import { Category } from "../schemas/Category";
-import Realm from "realm";
 import { useQuery, useRealm } from "@realm/react";
 import { useCollections } from "./useCollections";
 

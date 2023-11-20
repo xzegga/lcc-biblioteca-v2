@@ -13,14 +13,15 @@ export default function AppLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarBackground: () => (
-          <View style={tailwind`h-[40] bottom-0 w-full absolute`}>
+        tabBarBackground: () =>
+          (<View style={tailwind`h-[40] bottom-0 w-full absolute`}>
             <LinearGradient
               colors={[
-                "transparent",
+                "rgba(255,255,255,0)",
                 "rgba(255,255,255,0.8)",
                 "rgba(255,255,255,1)",
               ]}
+
               style={tailwind`h-[40]`}
             />
           </View>

@@ -1,6 +1,13 @@
-import { RealmProvider, useUser } from "@realm/react";
-import { openLocal, realmConfig } from "../../context/RealmContext";
-import { Schemas } from "../../schemas/Schemas";
+import { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import tailwind from 'twrnc';
+
+import { RealmProvider, useUser } from '@realm/react';
+
+import { openLocal, realmConfig } from '../../context/RealmContext';
+import { Schemas } from '../../schemas/Schemas';
+
+import Connecting from '../Connecting';
 
 /*
  * This component is responsible for rendering the Home component.
@@ -10,10 +17,22 @@ import { Schemas } from "../../schemas/Schemas";
 
 export function RealmApp({ children }: { children: React.ReactNode }) {
   const user = useUser();
+  const [appLoaded, setAppLoaded] = useState(false);
+
+  useEffect(() => {
+    if(appLoaded) console.log('App loaded')
+  }, [appLoaded]);
+
   return (
     <RealmProvider
       {...realmConfig}
-      fallback={() => null}
+      fallback={() => {
+        return (
+          <View style={[tailwind`px-6 pt-30`]}>
+            <Connecting action={setAppLoaded}/>
+          </View>
+        );
+      }}
       closeOnUnmount={false}
       {...(user.providerType !== "anon-user"
         ? {

@@ -1,4 +1,3 @@
-import { Category } from "../schemas/Category";
 import Realm from "realm";
 import { useRealm } from "@realm/react";
 

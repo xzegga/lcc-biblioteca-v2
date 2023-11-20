@@ -1,11 +1,9 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
 import { Pressable, View, Text } from "react-native";
-import { Animated } from "react-native";
 import tailwind from "twrnc";
 
-export default function BackBtn({ color = "text-white" }: { color: string }) {
+export default function BackBtn({ color = "text-white" }: { color?: string }) {
   const router = useRouter();
 
   return (

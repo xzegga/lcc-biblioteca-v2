@@ -1,9 +1,7 @@
 import { ScrollView, View, Text, Pressable } from "react-native";
 import tailwind from "twrnc";
 import { Crop } from "./Crop";
-import { useEffect, useState } from "react";
 import { useStore } from "../hooks/useGlobalStore";
-import { useCategories } from "../hooks/useCategories";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Category } from "../schemas/Category";
@@ -29,13 +27,13 @@ export function Crops({ crops }: { crops: any }) {
           <Link href={"/"}>
             <View
               style={tailwind`
-                                    flex
-                                    flex-row
-                                    justify-center                                    
-                                    items-center
-                                    bg-slate-900
-                                    px-3 py-1
-                                    rounded-[60px] ml-2`}
+                      flex
+                      flex-row
+                      justify-center
+                      items-center
+                      bg-slate-900
+                      px-3 py-1
+                      rounded-[60px] ml-2`}
             >
               <Text
                 style={tailwind`
